@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -70,7 +71,7 @@ fun RowScope.AddItem(
                 contentDescription = screen.title,
             )
         },
-        label = { if(isSelected)Text(text = screen.title) else Text("") },
+        label = { if(isSelected)Text(text = screen.title, fontWeight = FontWeight.Bold) else Text("") },
         selected = isSelected,
         onClick = {
             navController.navigate(screen.route) {

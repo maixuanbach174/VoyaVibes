@@ -13,10 +13,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.voyavibes.uiComponents.BookingServicesCards
+import com.example.voyavibes.uiComponents.CustomCardView
 
 @Composable
 fun TicketsScreen(innerPadding: PaddingValues) {
@@ -26,12 +31,27 @@ fun TicketsScreen(innerPadding: PaddingValues) {
             .padding(innerPadding)
             .background(Color(0x65D3D3D3))
     ) {
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text =
-            """
-                    This home screen hahaha
-                """.trimIndent(),
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 20.dp)
+            ,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Bookings",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(16.dp),
+                fontWeight = FontWeight.Bold
+            )
+            BookingServicesCards()
+        }
     }
+}
+
+@Preview
+@Composable
+fun PreviewTicketsScreen() {
+    TicketsScreen(PaddingValues(0.dp))
 }
