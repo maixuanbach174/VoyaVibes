@@ -62,30 +62,30 @@ fun SearchBar() {
     )
 }
 
-@Composable
-fun QuantitySelectTextField(id: Int) {
-    var text by remember { mutableStateOf("")}
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = {Text(text = "Quantity", fontSize = 20.sp) },
-        leadingIcon = { Icon(
-            painter = painterResource(id = id),
-            contentDescription = "Clear Icon",
-            tint = Color.White,
-            modifier = Modifier.size(40.dp)
-        ) },
-        shape = RoundedCornerShape(25.dp),
-        modifier = Modifier
-            .fillMaxWidth(),
-        colors = TextFieldDefaults.colors(
-            unfocusedTextColor = Color.LightGray,
-            focusedLabelColor = Color.DarkGray,
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
-        )
-    )
-}
+//@Composable
+//fun QuantitySelectTextField(id: Int) {
+//    var text by remember { mutableStateOf("")}
+//    TextField(
+//        value = text,
+//        onValueChange = { text = it },
+//        label = {Text(text = "Quantity", fontSize = 20.sp) },
+//        leadingIcon = { Icon(
+//            painter = painterResource(id = id),
+//            contentDescription = "Clear Icon",
+//            tint = Color.White,
+//            modifier = Modifier.size(40.dp)
+//        ) },
+//        shape = RoundedCornerShape(25.dp),
+//        modifier = Modifier
+//            .fillMaxWidth(),
+//        colors = TextFieldDefaults.colors(
+//            unfocusedTextColor = Color.LightGray,
+//            focusedLabelColor = Color.DarkGray,
+//            unfocusedContainerColor = Color.Transparent,
+//            focusedContainerColor = Color.Transparent,
+//        )
+//    )
+//}
 
 
 @Preview
