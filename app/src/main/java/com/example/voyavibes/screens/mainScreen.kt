@@ -22,7 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.voyavibes.navigation.BottomBarScreen
-import com.example.voyavibes.navigation.BottomNavGraph
+import com.example.voyavibes.navigation.NavGraph
 
 @Composable
 fun MainScreen() {
@@ -31,7 +31,7 @@ fun MainScreen() {
         bottomBar = { BottomBar(navController = navController)},
         modifier = Modifier.fillMaxSize()
     ) {innerPadding ->
-        BottomNavGraph(navController = navController, innerPadding = innerPadding)
+        NavGraph(navController = navController, innerPadding = innerPadding)
     }
 }
 
@@ -39,9 +39,9 @@ fun MainScreen() {
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
-        BottomBarScreen.Tickets,
+        BottomBarScreen.Booking,
         BottomBarScreen.Notifications,
-        BottomBarScreen.Profile
+        BottomBarScreen.Account
     )
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry.value?.destination
@@ -63,7 +63,6 @@ fun RowScope.AddItem(
     navController: NavHostController
 ) {
     val isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-
     BottomNavigationItem(
         icon = {
             Icon(
@@ -75,11 +74,7 @@ fun RowScope.AddItem(
         selected = isSelected,
         onClick = {
             navController.navigate(screen.route) {
-                popUpTo(navController.graph.startDestinationId) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
+
             }
         },
         modifier = Modifier.background(if(isSelected) Color(0xE5FFDDA2) else Color.White)

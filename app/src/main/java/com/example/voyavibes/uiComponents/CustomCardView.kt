@@ -36,12 +36,13 @@ data class CustomCard(
 )
 
 @Composable
-fun CustomCardView(customCard: CustomCard) {
+fun CustomCardView(customCard: CustomCard, onClick: () -> Unit = {}) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Box(
             modifier = Modifier
                 .background(Color.White, shape = RoundedCornerShape(15.dp))
                 .clickable {
+                    onClick()
                 }
                 .padding(20.dp)
             ,
@@ -77,7 +78,12 @@ object BookingCustomCard {
 }
 
 @Composable
-fun BookingServicesCards() {
+fun BookingServicesCards(
+    onTripClick: () -> Unit = {},
+    onHotelClick: () -> Unit = {},
+    onTransportClick: () -> Unit = {},
+    onEventClick: () -> Unit = {}
+) {
     LazyColumn(modifier = Modifier
         .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(25.dp),
@@ -85,7 +91,14 @@ fun BookingServicesCards() {
         contentPadding = PaddingValues(25.dp)
     ) {
         items(BookingCustomCard.booking) { customCard ->
-            CustomCardView(customCard)
+            CustomCardView(customCard, onClick = {
+                when(customCard.description){
+                    "Trips" -> onTripClick()
+                    "Hotel" -> onHotelClick()
+                    "Transport" -> onTransportClick()
+                    "Events" -> onEventClick()
+                }
+            })
         }
     }
 }

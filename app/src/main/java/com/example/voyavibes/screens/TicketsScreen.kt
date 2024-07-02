@@ -24,7 +24,12 @@ import com.example.voyavibes.uiComponents.BookingServicesCards
 import com.example.voyavibes.uiComponents.CustomCardView
 
 @Composable
-fun TicketsScreen(innerPadding: PaddingValues) {
+fun TicketsScreen(innerPadding: PaddingValues,
+                  onTripsClick: () -> Unit = {},
+                    onHotelsClick: () -> Unit = {},
+                    onTransportClick: () -> Unit = {},
+                    onEventClick: () -> Unit = {},
+                  ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +50,7 @@ fun TicketsScreen(innerPadding: PaddingValues) {
                 modifier = Modifier.padding(16.dp),
                 fontWeight = FontWeight.Bold
             )
-            BookingServicesCards()
+            BookingServicesCards( onTripsClick, onHotelsClick, onTransportClick, onEventClick)
         }
     }
 }

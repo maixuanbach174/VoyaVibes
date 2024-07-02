@@ -29,14 +29,14 @@ data class CustomButton(
 )
 
 @Composable
-fun CustomButtonView(customButton: CustomButton) {
+fun CustomButtonView(customButton: CustomButton, onClick: () -> Unit = {}) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
         Box(
             modifier = Modifier
                 .size(50.dp)
                 .background(Color(0xFF01635D), shape = RoundedCornerShape(15.dp))
                 .clickable {
-
+                    onClick()
                 }
             ,
             contentAlignment = Alignment.Center
@@ -67,13 +67,25 @@ object BookingCustomButton {
 }
 
 @Composable
-fun BookingServicesButtons() {
+fun BookingServicesButtons(
+    onTripsClick: () -> Unit,
+    onHotelClick: () -> Unit,
+    onTransportClick: () -> Unit,
+    onEventsClick: () -> Unit
+){
     LazyRow(  modifier = Modifier
         .fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         items(BookingCustomButton.booking) { customButton ->
-            CustomButtonView(customButton)
+            CustomButtonView(customButton, onClick = {
+                when(customButton.description){
+                    "Trips" -> onTripsClick()
+                    "Hotel" -> onHotelClick()
+                    "Transport" -> onTransportClick()
+                    "Events" -> onEventsClick()
+                }
+            })
         }
     }
 }

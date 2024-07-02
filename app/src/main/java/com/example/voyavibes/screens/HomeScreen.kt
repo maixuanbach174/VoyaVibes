@@ -18,7 +18,13 @@ import androidx.compose.ui.unit.sp
 import com.example.voyavibes.uiComponents.BookingServicesButtons
 
 @Composable
-fun HomeScreen(innerPadding: PaddingValues) {
+fun HomeScreen(
+    innerPadding: PaddingValues,
+    onTripsClick: () -> Unit,
+    onHotelClick: () -> Unit,
+    onTransportClick: () -> Unit,
+    onEventsClick: () -> Unit,
+){
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -45,7 +51,7 @@ fun HomeScreen(innerPadding: PaddingValues) {
                     fontSize = 20.sp
                 )
                 Spacer(modifier = Modifier.padding(10.dp))
-                BookingServicesButtons()
+                BookingServicesButtons( onTripsClick, onHotelClick, onTransportClick, onEventsClick)
 
 
             }
