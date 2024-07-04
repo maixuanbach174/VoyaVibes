@@ -72,7 +72,10 @@ import com.example.voyavibes.ui.theme.LightColorScheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransportBookingScreen(onBackClick: () -> Unit){
+fun TransportBookingScreen(
+    onBackClick: () -> Unit,
+    onSearchClick: () -> Unit
+){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var fromText by remember{ mutableStateOf("")}
     Scaffold(
@@ -116,7 +119,6 @@ fun TransportBookingScreen(onBackClick: () -> Unit){
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 LocationTextField()
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -146,7 +148,7 @@ fun TransportBookingScreen(onBackClick: () -> Unit){
                 TransportInput()
                 Spacer(modifier = Modifier.padding(15.dp))
                 FilledTonalButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { onSearchClick()},
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.White,
                         containerColor = colorResource(id = R.color.peach_300)
@@ -514,7 +516,7 @@ fun TransportInput(){
 @Preview
 @Composable
 fun TransportBookingScreenPreview(){
-    TransportBookingScreen(onBackClick = {})
+    TransportBookingScreen(onBackClick = {}, onSearchClick = {})
 }
 
 //@Preview

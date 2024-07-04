@@ -13,6 +13,7 @@ import com.example.voyavibes.screens.NotificationsScreen
 import com.example.voyavibes.screens.ProfileScreen
 import com.example.voyavibes.screens.TicketsScreen
 import com.example.voyavibes.screens.TransportBookingScreen
+import com.example.voyavibes.screens.TransportFlights
 
 
 @Composable
@@ -49,7 +50,13 @@ fun NavGraph (navController: NavHostController, innerPadding: PaddingValues) {
             ProfileScreen(innerPadding)
         }
         composable("TransportBooking") {
-            TransportBookingScreen(onBackClick = { navController.popBackStack() })
+            TransportBookingScreen(
+                onBackClick = { navController.popBackStack() },
+                onSearchClick = { navController.navigate("TransportFlights") }
+            )
+        }
+        composable("TransportFlights") {
+            TransportFlights(onBackClick = { navController.popBackStack() })
         }
     }
 }
