@@ -89,7 +89,7 @@ fun BookingServicesCards(
         .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(25.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(25.dp)
+        contentPadding = PaddingValues(start = 25.dp, end = 25.dp, bottom = 25.dp, top = 0.dp)
     ) {
         items(BookingCustomCard.booking) { customCard ->
             CustomCardView(customCard, onClick = {

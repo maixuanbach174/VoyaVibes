@@ -38,7 +38,6 @@ fun TicketsScreen(innerPadding: PaddingValues,
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
-                .padding(top = 20.dp)
             ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally

@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.example.voyavibes.screens.FilterScreen
 import com.example.voyavibes.screens.HomeScreen
 import com.example.voyavibes.screens.NotificationsScreen
 import com.example.voyavibes.screens.ProfileScreen
@@ -56,7 +57,11 @@ fun NavGraph (navController: NavHostController, innerPadding: PaddingValues) {
             )
         }
         composable("TransportFlights") {
-            TransportFlights(onBackClick = { navController.popBackStack() })
+            TransportFlights(onBackClick = { navController.popBackStack() },
+                onFilterClick = { navController.navigate("FilterScreen") })
+        }
+        composable("FilterScreen") {
+             FilterScreen(onBackClick = { navController.popBackStack() })
         }
     }
 }
