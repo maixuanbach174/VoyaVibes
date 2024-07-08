@@ -5,13 +5,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -80,8 +85,56 @@ fun SelectButtonList() {
     }
 }
 
+@Composable
+fun TravellerSelectInput(
+    traveller: MutableIntState = mutableIntStateOf(0),
+    travellerNum: Int = 6
+){
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        items(travellerNum){
+            TravellerSelectButtonItem(
+                onClick = {traveller.intValue = it},
+                isSelected = traveller.intValue == it,
+                text = (it + 1).toString()
+            )
+        }
+
+    }
+
+
+}
+
+@Composable
+fun TravellerSelectButtonItem(onClick: ()->Unit, isSelected: Boolean, text: String){
+    val selectContainerColor = colorResource(id = R.color.peach_50)
+    val unSelectContainerColor = Color.Transparent
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clickable { onClick() }
+            .clip(RoundedCornerShape(10.dp))
+            .background(color = if (isSelected) selectContainerColor else unSelectContainerColor)
+            .size(40.dp)
+    ){
+        Text(
+            text = text,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
 @Preview
 @Composable
 fun PreviewSelectButtonList() {
     SelectButtonList()
+}
+
+@Preview
+@Composable
+fun PreviewTravellerSelectInput() {
+    TravellerSelectInput()
 }

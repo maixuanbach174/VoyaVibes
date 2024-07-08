@@ -25,7 +25,7 @@ fun CheckList(
     selectedCheckIndex: MutableState<Int?>
 ) {
     LazyColumn(
-        modifier = Modifier.height(100.dp)
+        modifier = Modifier.height(150.dp)
     ) {
         items(checkList.size) { index ->
             CheckItem(

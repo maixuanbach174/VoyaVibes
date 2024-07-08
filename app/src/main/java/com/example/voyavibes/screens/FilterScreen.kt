@@ -58,7 +58,7 @@ import com.example.voyavibes.uiComponents.SortByComposable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterScreen(onBackClick : ()->Unit) {
+fun FilterScreen(onBackClick : ()->Unit, onResetClick: ()->Unit, onDoneClick:()->Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val selectedDepartureTime = remember { mutableIntStateOf(0) }
     val selectedArrivalTime = remember { mutableIntStateOf(1) }
@@ -104,7 +104,7 @@ fun FilterScreen(onBackClick : ()->Unit) {
                 ),
                 title = {
                     Text(
-                        "Flights",
+                        "Filters",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontWeight = FontWeight.Bold,
@@ -162,7 +162,7 @@ fun FilterScreen(onBackClick : ()->Unit) {
                 Spacer(modifier = Modifier.size(25.dp))
                 Text(text = "Sort by", fontSize = 15.sp, fontWeight = FontWeight.Bold)
                 SortByComposable()
-                ResetAndDoneButtons()
+                ResetAndDoneButtons(onResetClick, onDoneClick)
             }
         }
     }
@@ -300,14 +300,17 @@ fun PriceInputField(
 }
 
 @Composable
-fun ResetAndDoneButtons(){
+fun ResetAndDoneButtons(
+    onResetClick: () -> Unit,
+    onDoneClick: () -> Unit
+){
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(20.dp)
     )
     {
         FilledTonalButton(
-            onClick = {},
+            onClick = onResetClick,
             colors = ButtonDefaults.buttonColors(
                 contentColor = colorResource(id = R.color.peach_300),
                 containerColor = Color.White
@@ -323,7 +326,7 @@ fun ResetAndDoneButtons(){
             )
         }
         FilledTonalButton(
-            onClick = {},
+            onClick = onDoneClick,
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
                 containerColor = colorResource(id = R.color.peach_300)
@@ -367,18 +370,12 @@ fun updateSliderRange(
 
 fun isValidPrice(value: String): Boolean {
     val price = value.toFloatOrNull()
-    return price != null && price in 25f..300f
+    return price != null && price in 25f..500f
 }
 
 @Preview
 @Composable
 fun FilterScreenPreview(){
-    FilterScreen(onBackClick = {})
-}
-
-@Preview
-@Composable
-fun PreviewResetDoneButton(){
-    ResetAndDoneButtons()
+    FilterScreen(onBackClick = {}, onResetClick = {}, onDoneClick = {})
 }
 
