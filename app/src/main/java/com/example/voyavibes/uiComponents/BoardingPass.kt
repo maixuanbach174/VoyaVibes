@@ -29,7 +29,7 @@ import com.example.voyavibes.Data.Flights
 import com.example.voyavibes.R
 
 @Composable
-fun BoardingPass(flight: Flight) {
+fun BoardingPass(flight: Flight, seat: String = "") {
     Box(
         modifier = Modifier.clip(shape = RoundedCornerShape(20.dp))
             .background(Color.White)
@@ -38,17 +38,17 @@ fun BoardingPass(flight: Flight) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.padding(10.dp))
-            BoardingPassHeading(airwayName = "British Airways Flight Nl-41")
+            BoardingPassHeading(airwayName = "Vietnam Airlines")
             Divider(
                 thickness = 2.dp, color = Color.Gray,
                 modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
             )
-            FlightDetailCard(flight = flight)
+            FlightDetailCard(flight = flight, onCardClick = {})
             Divider(
                 thickness = 2.dp, color = Color.Gray,
                 modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
             )
-            TicketDetail(tiketId = "A-123", classType = "Economy", seat = "A-12", passengerNum = 1)
+            TicketDetail(tiketId = "A-123", classType = "Economy", seat = seat, passengerNum = 1)
             BarCode()
             Text("A3427371903848")
             Spacer(modifier = Modifier.padding(10.dp))
@@ -173,10 +173,4 @@ fun BarCode(){
 @Composable
 fun BarCodeRV(){
     BarCode()
-}
-
-@Preview
-@Composable
-fun PreviewBoardingPass() {
-    BoardingPass(flight = Flights.list[0])
 }

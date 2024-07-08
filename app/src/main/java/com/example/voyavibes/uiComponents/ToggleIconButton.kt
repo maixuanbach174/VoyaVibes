@@ -9,6 +9,7 @@ import androidx.compose.material3.FilledTonalIconToggleButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -43,19 +44,24 @@ fun CustomToggleIconButton(iconId: Int, checked: Boolean, onCheckedChange: (Bool
 }
 
 @Composable
-fun CustomToggleIconButtonList() {
-    val coffeeChecked = remember {
-        mutableStateOf(false)
-    }
-    val foodChecked = remember {
-        mutableStateOf(true)
-    }
-    val wifiChecked = remember {
-        mutableStateOf(true)
-    }
-    val coldChecked = remember {
-        mutableStateOf(false)
-    }
+fun CustomToggleIconButtonList(
+    coffeeChecked: MutableState<Boolean>,
+    foodChecked: MutableState<Boolean>,
+    wifiChecked: MutableState<Boolean>,
+    coldChecked: MutableState<Boolean>
+) {
+//    val coffeeChecked = remember {
+//        mutableStateOf(false)
+//    }
+//    val foodChecked = remember {
+//        mutableStateOf(true)
+//    }
+//    val wifiChecked = remember {
+//        mutableStateOf(true)
+//    }
+//    val coldChecked = remember {
+//        mutableStateOf(false)
+//    }
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.padding(top = 10.dp)
@@ -105,9 +111,9 @@ fun CustomToggleIconButtonList() {
     }
 }
 
-@Preview
-@Composable
-fun CustomToggleIconButtonListPreview() {
-    CustomToggleIconButtonList()
-}
+//@Preview
+//@Composable
+//fun CustomToggleIconButtonListPreview() {
+//    CustomToggleIconButtonList()
+//}
 

@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,15 +38,31 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.voyavibes.Data.Flight
 import com.example.voyavibes.Data.Flights
 import com.example.voyavibes.R
 import com.example.voyavibes.uiComponents.FlightDetailCardList
 import com.example.voyavibes.uiComponents.SelectButtonList
+import com.example.voyavibes.uiComponents.selectList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit) {
+fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit, onFlightClick: (Flight)->Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val isSelected = remember {
+        mutableStateOf(selectList.list.first())
+    }
+    val numFlights = remember {
+        mutableIntStateOf(9)
+    }
+    numFlights.intValue = when (isSelected.value.ngay) {
+        "04" -> Flights.list_04_July.size
+        "05" -> Flights.list_05_July.size
+        "06" -> Flights.list_06_July.size
+        else -> {
+            Flights.list_04_July.size}
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -85,7 +104,7 @@ fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit) {
                     .fillMaxSize()
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
             ) {
-                SelectButtonList()
+                SelectButtonList(isSelected)
                 Spacer(modifier = Modifier.size(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -93,7 +112,7 @@ fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = "7 flights available New York to London",
+                        text = "${numFlights.intValue} flights available Da Nang to HCM City",
                     )
                     FilledTonalIconButton(
                         onClick = onFilterClick,
@@ -110,7 +129,12 @@ fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit) {
                     }
                 }
                 Spacer(modifier = Modifier.size(10.dp))
-                FlightDetailCardList(flights = Flights.list)
+                when (isSelected.value.ngay) {
+                    "04" -> FlightDetailCardList(flights = Flights.list_04_July, onCardClick = onFlightClick)
+                    "05" -> FlightDetailCardList(flights = Flights.list_05_July, onCardClick = onFlightClick)
+                    "06" -> FlightDetailCardList(flights = Flights.list_06_July, onCardClick = onFlightClick)
+                    else -> FlightDetailCardList(flights = Flights.list_04_July, onCardClick = onFlightClick)
+                }
             }
         }
     }
@@ -119,5 +143,5 @@ fun TransportFlights(onBackClick: () -> Unit, onFilterClick: () -> Unit) {
 @Preview
 @Composable
 fun TransportFlightsPreview() {
-    TransportFlights(onBackClick = {}, onFilterClick = {})
+    TransportFlights(onBackClick = {}, onFilterClick = {}, onFlightClick = {})
 }

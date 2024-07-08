@@ -65,6 +65,11 @@ fun FilterScreen(onBackClick : ()->Unit, onResetClick: ()->Unit, onDoneClick:()-
     var sliderPosition by remember { mutableStateOf(50f..250f) }
     var beginPrice by remember { mutableStateOf("50") }
     var endPrice by remember { mutableStateOf("250") }
+    val selectedCheckIndex = remember { mutableStateOf<Int?>(0) }
+    val coffeeChecked = remember { mutableStateOf(false) }
+    val foodChecked = remember { mutableStateOf(true) }
+    val wifiChecked = remember { mutableStateOf(true) }
+    val coldChecked = remember { mutableStateOf(false) }
 
     // Update the text field values when the slider changes
     val onSliderValueChange: (ClosedFloatingPointRange<Float>) -> Unit = { range ->
@@ -158,11 +163,23 @@ fun FilterScreen(onBackClick : ()->Unit, onResetClick: ()->Unit, onDoneClick:()-
                 )
                 Spacer(modifier = Modifier.size(25.dp))
                 Text(text = "Facilities", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                CustomToggleIconButtonList()
+                CustomToggleIconButtonList( coffeeChecked, foodChecked, wifiChecked, coldChecked)
                 Spacer(modifier = Modifier.size(25.dp))
                 Text(text = "Sort by", fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                SortByComposable()
-                ResetAndDoneButtons(onResetClick, onDoneClick)
+                SortByComposable(selectedCheckIndex)
+                ResetAndDoneButtons({
+                    selectedDepartureTime.intValue = 0
+                    selectedArrivalTime.intValue = 1
+                    sliderPosition = 50f..250f
+                    beginPrice = "50"
+                    endPrice = "250"
+                    coffeeChecked.value = false
+                    foodChecked.value = true
+                    wifiChecked.value = true
+                    coldChecked.value = false
+                    selectedCheckIndex.value = 0
+
+                }, onDoneClick)
             }
         }
     }
@@ -361,7 +378,7 @@ fun updateSliderRange(
 ): ClosedFloatingPointRange<Float> {
     val begin = beginPrice.toFloatOrNull() ?: sliderPosition.start
     val end = endPrice.toFloatOrNull() ?: sliderPosition.endInclusive
-    return if (begin in 25f..300f && end in 25f..300f && begin <= end) {
+    return if (begin in 25f..500f && end in 25f..500f && begin <= end) {
         begin..end
     } else {
         sliderPosition

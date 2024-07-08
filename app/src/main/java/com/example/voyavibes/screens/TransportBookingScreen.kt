@@ -1,12 +1,12 @@
 package com.example.voyavibes.screens
 
-import android.content.res.Resources.Theme
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,21 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -46,6 +39,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,8 +48,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterEnd
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -68,8 +61,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.voyavibes.R
+import com.example.voyavibes.View.MainViewModel
 import com.example.voyavibes.ui.theme.LightColorScheme
+import com.example.voyavibes.uiComponents.MinimalDialog
+import com.maxkeppeker.sheets.core.models.base.rememberSheetState
+import com.maxkeppeler.sheets.calendar.CalendarDialog
+import com.maxkeppeler.sheets.calendar.models.CalendarConfig
+import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.calendar.models.CalendarStyle
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransportBookingScreen(
@@ -77,7 +80,9 @@ fun TransportBookingScreen(
     onSearchClick: () -> Unit
 ){
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    var fromText by remember{ mutableStateOf("")}
+    val textFrom = remember { mutableStateOf("Da Nang (DAD)")}
+    val textTo = remember { mutableStateOf("Ho Chi Minh City (SGN)")}
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -120,7 +125,7 @@ fun TransportBookingScreen(
                     .fillMaxSize()
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
             ) {
-                LocationTextField()
+                LocationTextField(textFrom, textTo)
                 Spacer(modifier = Modifier.padding(5.dp))
                 DateInput()
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -172,17 +177,18 @@ fun TransportBookingScreen(
 }
 
 @Composable
-fun LocationTextField() {
-    var textFrom by remember { mutableStateOf("New York (NYC)")}
-    var textTo by remember { mutableStateOf("London (LDN)")}
+fun LocationTextField(
+    textFrom: MutableState<String>,
+    textTo: MutableState<String>
+    ) {
     Box(
         contentAlignment = CenterEnd,
     ) {
         Column {
             OutlinedTextField(
-                value = textFrom,
+                value = textFrom.value,
                 onValueChange = {
-                    textFrom = it
+                    textFrom.value = it
                 },
                 label = { Text("From") },
                 modifier = Modifier.fillMaxWidth(),
@@ -191,16 +197,16 @@ fun LocationTextField() {
                     focusedLabelColor = Color.Black,
                     unfocusedContainerColor = Color.White,
                     unfocusedBorderColor = Color.White,
-                    focusedContainerColor = colorResource(id = R.color.peach_50),
+                    focusedContainerColor = Color.White,
                     focusedBorderColor = Color.White,
                     cursorColor = Color.Black
                 ) ,
                 shape = RoundedCornerShape(15.dp),
             )
             OutlinedTextField(
-                value = textTo,
+                value = textTo.value,
                 onValueChange = {
-                    textTo = it
+                    textTo.value = it
                 },
                 label = { Text("To") },
                 modifier = Modifier.fillMaxWidth(),
@@ -209,7 +215,7 @@ fun LocationTextField() {
                     focusedLabelColor = Color.Black,
                     unfocusedContainerColor = Color.White,
                     unfocusedBorderColor = Color.White,
-                    focusedContainerColor = colorResource(id = R.color.peach_50),
+                    focusedContainerColor = Color.White,
                     focusedBorderColor = Color.White,
                     cursorColor = Color.Black
                 ) ,
@@ -219,7 +225,11 @@ fun LocationTextField() {
         }
 
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = {
+                val temp = textFrom.value
+                textFrom.value = textTo.value
+                textTo.value = temp
+            },
             modifier = Modifier
                 .offset(x = (-30).dp, y = 5.dp)
                 .background(Color(0xFFFEA36B), RoundedCornerShape(10.dp))
@@ -237,10 +247,57 @@ fun LocationTextField() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateInput(){
     var departure by remember { mutableStateOf("July 04, 2024")}
-    var returnDate by remember { mutableStateOf("July 08, 2024")}
+    var returnDate by remember { mutableStateOf("July 14, 2024")}
+    val calendarState = rememberSheetState()
+    val dateFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy")
+    var currentField by remember { mutableIntStateOf(0) }
+
+    var departureDate by remember { mutableStateOf<LocalDate?>(LocalDate.parse(departure, dateFormatter)) }
+    var returnDateValue by remember { mutableStateOf<LocalDate?>(LocalDate.parse(returnDate, dateFormatter)) }
+
+    val openMinimalDialog = remember { mutableStateOf(false) }
+    when {
+        openMinimalDialog.value -> {
+            MinimalDialog(
+                onDismissRequest = { openMinimalDialog.value = false },
+                text = "The return date must be after the departure date."
+            )
+        }
+    }
+
+    CalendarDialog(
+        state = calendarState,
+        config = CalendarConfig(
+            monthSelection = true,
+            yearSelection = true,
+            style = CalendarStyle.MONTH
+        ),
+        selection = CalendarSelection.Date{
+                date ->
+            val formattedDate = date.format(dateFormatter)
+            if (currentField == 0) {
+                departureDate = date
+                departure = formattedDate
+                if (returnDateValue != null && returnDateValue!!.isBefore(date)) {
+                    returnDateValue = date.plusDays(1)
+                    returnDate = returnDateValue!!.format(dateFormatter)
+                }
+            } else {
+                if (date.isAfter(departureDate)) {
+                    returnDateValue = date
+                    returnDate = formattedDate
+                } else {
+                    openMinimalDialog.value = true
+                }
+            }
+        }
+    )
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(15.dp)
@@ -252,34 +309,42 @@ fun DateInput(){
             },
             label = { Text("Departure") },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedContainerColor = Color.White,
-                unfocusedBorderColor = Color.White,
-                focusedContainerColor = colorResource(id = R.color.peach_50),
-                focusedBorderColor = Color.White,
+                disabledTextColor = Color.Black,
+                disabledLabelColor = Color.Black,
+                disabledContainerColor = Color.White,
+                disabledBorderColor = Color.White,
                 cursorColor = Color.Black
             ) ,
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    currentField = 0
+                    calendarState.show()
+                },
+           enabled = false
         )
         OutlinedTextField(
+            enabled = false,
             value = returnDate,
             onValueChange = {
                 returnDate = it
             },
             label = { Text("Return") },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedContainerColor = Color.White,
-                unfocusedBorderColor = Color.White,
-                focusedContainerColor = colorResource(id = R.color.peach_50),
-                focusedBorderColor = Color.White,
+                disabledTextColor = Color.Black,
+                disabledLabelColor = Color.Black,
+                disabledContainerColor = Color.White,
+                disabledBorderColor = Color.White,
                 cursorColor = Color.Black
             ) ,
             shape = RoundedCornerShape(15.dp),
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    currentField = 1
+                    calendarState.show()
+                },
         )
 
     }
@@ -511,16 +576,3 @@ fun TransportInput(){
         }
     }
 }
-
-
-@Preview
-@Composable
-fun TransportBookingScreenPreview(){
-    TransportBookingScreen(onBackClick = {}, onSearchClick = {})
-}
-
-//@Preview
-//@Composable
-//fun LocationTextFieldPreview(){
-//    LocationTextField()
-//}

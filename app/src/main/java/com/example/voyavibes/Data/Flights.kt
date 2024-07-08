@@ -12,15 +12,36 @@ data class Flight(
 )
 
 object Flights {
-    val list = listOf(
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "9:00 AM", 200.0, "AA 13"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "0:00 PM", 200.0, "AA 14"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "1:00 PM", 200.0, "AA 15"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "3:00 PM", 200.0, "AA 16"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "5:00 PM", 200.0, "AA 17"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "7:00 PM", 200.0, "AA 18"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "9:00 PM", 200.0, "AA 19"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "10:00 PM", 200.0, "AA 10"),
-        Flight("New York", "NYC", "London", "LDN", "02 Jun", "11:00 PM", 200.0, "AA 11"),
+    val list_04_July = listOf(
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "7:00 AM", 100.0, "VN 134"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "8:00 AM", 200.0, "VN 374"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "12:00 AM", 100.0, "VN 340"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "3:00 PM", 250.0, "VN 156"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "5:00 PM", 230.0, "VN 221"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "7:00 PM", 140.0, "VN 734"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "9:00 PM", 90.0, "VN 190"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "10:00 PM", 60.0, "VN 132"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "04 July", "11:00 PM", 70.0, "VN 142"),
+    )
+
+    val list_05_July = listOf(
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "4:30 AM", 100.0, "VN 134"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "10:20 AM", 200.0, "VN 374"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "12:00 AM", 300.0, "VN 340"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "3:00 PM", 250.0, "VN 156"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "6:00 PM", 230.0, "VN 221"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "7:00 PM", 140.0, "VN 734"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "8:00 PM", 90.0, "VN 190"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "05 July", "10:00 PM", 60.0, "VN 132"),
+    )
+
+    val list_06_July = listOf(
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "4:30 AM", 100.0, "VN 134"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "5:30 AM", 200.0, "VN 374"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "12:00 AM", 300.0, "VN 340"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "3:10 PM", 250.0, "VN 156"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "5:30 PM", 230.0, "VN 221"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "7:45 PM", 140.0, "VN 734"),
+        Flight("Da Nang", "DAD", "HCM City", "SGN", "06 July", "9:45 PM", 90.0, "VN 190"),
     )
 }

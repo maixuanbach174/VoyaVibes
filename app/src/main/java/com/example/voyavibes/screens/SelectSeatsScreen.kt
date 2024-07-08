@@ -1,6 +1,7 @@
 package com.example.voyavibes.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,12 +48,25 @@ import androidx.compose.ui.unit.sp
 import com.example.voyavibes.BackEnd.Seat
 import com.example.voyavibes.BackEnd.SeatTable
 import com.example.voyavibes.R
+import com.example.voyavibes.uiComponents.MinimalDialog
 import com.example.voyavibes.uiComponents.TravellerSelectInput
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectSeatScreen(onBackClick: () -> Unit, onContinueClick: () -> Unit = {}) {
+fun SelectSeatScreen(onBackClick: () -> Unit, onContinueClick: (String) -> Unit = {}) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val selectPosition = remember { mutableStateOf(Pair(-1, -1)) }
+    val openMinimalDialog = remember { mutableStateOf(false) }
+    val travellerNum = remember {mutableIntStateOf(0)}
+    val totalPrice = remember { mutableDoubleStateOf(0.0)}
+    val seat = remember { mutableStateOf("None")}
+
+    seat.value = if(selectPosition.value.first != -1 && selectPosition.value.second != -1) {
+        SeatTable.getSeats()[selectPosition.value.first][selectPosition.value.second].seat
+    } else {
+        "None"
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -100,12 +118,28 @@ fun SelectSeatScreen(onBackClick: () -> Unit, onContinueClick: () -> Unit = {}) 
                 SeatLabel()
                 Spacer(modifier = Modifier.size(25.dp))
                 DisplayHeadline()
-                DisplaySeatTable(SeatTable.getSeats())
+                DisplaySeatTable(SeatTable.getSeats(), onClick = {
+                    if(isAvailable(SeatTable.getSeats()[it.first][it.second])){
+                        if(selectPosition.value.first != -1 && selectPosition.value.second != -1) {
+                            SeatTable.getSeats()[selectPosition.value.first][selectPosition.value.second].status.intValue = 2
+                        } else
+                        {
+                            totalPrice.doubleValue += SeatTable.getSeats()[it.first][it.second].price
+                        }
+                        selectPosition.value = it
+                        SeatTable.getSeats()[it.first][it.second].status.intValue = 0
+                    } else
+                    {
+                        openMinimalDialog.value = true
+                    }
+                })
                 Spacer(modifier = Modifier.size(25.dp))
-                TotalSeatPanel(2, 200.0)
+                TotalSeatPanel( seat.value, totalPrice.doubleValue, travellerNum.intValue + 1)
                 Spacer(modifier = Modifier.size(25.dp))
                 FilledTonalButton(
-                    onClick = onContinueClick,
+                    onClick = {
+                        onContinueClick(seat.value)
+                    },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.filledTonalButtonColors(
                         contentColor = Color.White,
@@ -122,6 +156,14 @@ fun SelectSeatScreen(onBackClick: () -> Unit, onContinueClick: () -> Unit = {}) 
                     shape = RoundedCornerShape(20.dp)
                 )
             }
+        }
+    }
+    when {
+        openMinimalDialog.value -> {
+            MinimalDialog(
+                onDismissRequest = { openMinimalDialog.value = false },
+                text = "This seat is booked."
+            )
         }
     }
 }
@@ -189,29 +231,19 @@ fun SeatTableSelect() {
 
 }
 
+fun isAvailable(seat: Seat): Boolean {
+    return seat.status.intValue == 2
+}
+
 @Composable
-fun DisplaySeatTable(seats: MutableList<MutableList<Seat>>) {
+fun DisplaySeatTable(seats: MutableList<MutableList<Seat>>, onClick: (Pair<Int, Int>)->Unit = {}){
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.height(315.dp)
     ) {
         items(seats.size) {row->
-            DisplaySeatInRow(rowSeats = seats[row], index = row + 1)
+            DisplaySeatInRow(rowSeats = seats[row], index = row, onClick = onClick)
         }
-    }
-}
-
-@Composable
-fun DisplayHeadLine(){
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        Text(text = "A", style = MaterialTheme.typography.headlineSmall)
-        Text(text = "B", style = MaterialTheme.typography.headlineSmall)
-        Box(modifier = Modifier.weight(1f))
-        Text(text = "C", style = MaterialTheme.typography.headlineSmall)
-        Text(text = "D", style = MaterialTheme.typography.headlineSmall)
     }
 }
 
@@ -281,7 +313,7 @@ fun DisplayHeadline() {
 }
 
 @Composable
-fun DisplaySeatInRow(rowSeats: MutableList<Seat>, index: Int){
+fun DisplaySeatInRow(rowSeats: MutableList<Seat>, index: Int, onClick: (Pair<Int,Int>)->Unit = {}){
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -292,16 +324,16 @@ fun DisplaySeatInRow(rowSeats: MutableList<Seat>, index: Int){
         ) {
             DisplaySeat(seat = rowSeats[0], modifier = Modifier
                 .weight(1f)
-                .size(55.dp))
+                .size(55.dp), onClick = onClick, index = Pair(index, 0))
             DisplaySeat(seat = rowSeats[1], modifier = Modifier
                 .size(55.dp)
-                .weight(1f))
+                .weight(1f), onClick = onClick, index = Pair(index, 1))
         }
         Box(modifier = Modifier.weight(1f),
             contentAlignment = Alignment.Center,
         )
         {
-            Text(text = index.toString(),
+            Text(text = (index+1).toString(),
                 style = MaterialTheme.typography.headlineSmall,
             )
         }
@@ -312,19 +344,19 @@ fun DisplaySeatInRow(rowSeats: MutableList<Seat>, index: Int){
         ) {
             DisplaySeat(seat = rowSeats[2], modifier = Modifier
                 .size(55.dp)
-                .weight(1f))
+                .weight(1f), onClick = onClick, index = Pair(index, 2))
             DisplaySeat(seat = rowSeats[3], modifier = Modifier
                 .size(55.dp)
-                .weight(1f))
+                .weight(1f), onClick = onClick, index = Pair(index, 3))
         }
     }
 }
 
 @Composable
-fun DisplaySeat(seat:Seat, modifier: Modifier){
+fun DisplaySeat(seat:Seat, modifier: Modifier, onClick: (Pair<Int,Int>)->Unit, index: Pair<Int, Int>){
     Card (
         colors = CardDefaults.cardColors(
-            containerColor = when (seat.status) {
+            containerColor = when (seat.status.intValue) {
                 0 -> colorResource(id = R.color.peach_300)
                 1 -> colorResource(id = R.color.green_700)
                 else -> colorResource(id = R.color.green_50)
@@ -333,13 +365,13 @@ fun DisplaySeat(seat:Seat, modifier: Modifier){
         content = {
 
         },
-        modifier = modifier,
+        modifier = modifier.clickable { onClick(index) },
         shape = RoundedCornerShape(13.dp)
     )
 }
 
 @Composable
-fun TotalSeatPanel(seatNum: Int, totalPrice: Double){
+fun TotalSeatPanel(seatNum: String, totalPrice: Double, travellerNum: Int = 0){
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(15.dp),
@@ -356,7 +388,7 @@ fun TotalSeatPanel(seatNum: Int, totalPrice: Double){
                 fontWeight = FontWeight.Bold
                 )
             Text(
-                text = seatNum.toString(),
+                text = "Traveller $travellerNum/ Seat $seatNum",
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold
             )

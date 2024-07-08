@@ -17,6 +17,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,15 +40,15 @@ data class selectItem(
 
 object selectList {
     val list = listOf(
-        selectItem("TH", "02"),
-        selectItem("FR", "03"),
-        selectItem("SA", "04"),
-        selectItem("SU", "05"),
-        selectItem("MO", "06"),
-        selectItem("TU", "07"),
-        selectItem("WE", "08"),
-        selectItem("TH", "09"),
-        selectItem("FR", "10"),
+        selectItem("TH", "04"),
+        selectItem("FR", "05"),
+        selectItem("SA", "06"),
+        selectItem("SU", "07"),
+        selectItem("MO", "08"),
+        selectItem("TU", "09"),
+        selectItem("WE", "10"),
+        selectItem("TH", "11"),
+        selectItem("FR", "12"),
     )
 }
 
@@ -71,15 +72,15 @@ fun SelectButton(selectItem: selectItem, isSelected: Boolean, onClick: () -> Uni
     }
 }
 @Composable
-fun SelectButtonList() {
-    var isSelected by remember { mutableStateOf(selectList.list.first()) }
+fun SelectButtonList(isSelected: MutableState<selectItem>) {
+//    var isSelected by remember { mutableStateOf(selectList.list.first()) }
     LazyRow(
 //        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(15.dp),
     ) {
         items(selectList.list) { item ->
-            SelectButton(selectItem = item, isSelected == item) {
-                isSelected = item
+            SelectButton(selectItem = item, isSelected.value == item) {
+                isSelected.value = item
             }
         }
     }
@@ -130,7 +131,7 @@ fun TravellerSelectButtonItem(onClick: ()->Unit, isSelected: Boolean, text: Stri
 @Preview
 @Composable
 fun PreviewSelectButtonList() {
-    SelectButtonList()
+    SelectButtonList( remember { mutableStateOf(selectList.list.first()) })
 }
 
 @Preview

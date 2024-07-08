@@ -74,4 +74,6 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation ("androidx.compose.material3:material3:1.0.0-alpha01")
 
+    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 }

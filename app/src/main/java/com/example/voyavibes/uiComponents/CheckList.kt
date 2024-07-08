@@ -64,9 +64,9 @@ fun CheckItem(
 }
 
 @Composable
-fun SortByComposable() {
-    val checkList = listOf("Arrival Time", "Departure Time", "Price", "Duration")
-    val selectedCheckIndex = remember { mutableStateOf<Int?>(0) }
+fun SortByComposable(selectedCheckIndex: MutableState<Int?>) {
+    val checkList = listOf("Departure Time", "Arrival Time", "Price", "Duration")
+//    val selectedCheckIndex = remember { mutableStateOf<Int?>(0) }
 
     CheckList(
         checkList = checkList,
@@ -74,8 +74,8 @@ fun SortByComposable() {
     )
 }
 
-@Preview
-@Composable
-fun CheckListPreview() {
-    SortByComposable()
-}
+//@Preview
+//@Composable
+//fun CheckListPreview() {
+//    SortByComposable()
+//}

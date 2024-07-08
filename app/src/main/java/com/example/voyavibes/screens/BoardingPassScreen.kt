@@ -37,7 +37,7 @@ import com.example.voyavibes.uiComponents.BoardingPass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoardingPassScreen(onBackClick: ()->Unit) {
+fun BoardingPassScreen(onBackClick: ()->Unit, seat: String) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -80,7 +80,7 @@ fun BoardingPassScreen(onBackClick: ()->Unit) {
                     .fillMaxSize()
                     .padding(start = 20.dp, top = 0.dp, end = 10.dp, bottom = 0.dp),
             ) {
-                BoardingPass(flight = Flights.list[0])
+                BoardingPass(flight = Flights.list_04_July[2], seat)
                 Spacer(modifier = Modifier.size(20.dp))
                 FilledTonalButton(
                     onClick =  {},

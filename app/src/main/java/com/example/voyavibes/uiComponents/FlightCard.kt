@@ -2,6 +2,7 @@ package com.example.voyavibes.uiComponents
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -204,11 +205,12 @@ fun DashedLine(
 }
 
 @Composable
-fun FlightDetailCard(flight: Flight) {
+fun FlightDetailCard(flight: Flight, onCardClick: (Flight) -> Unit) {
     Box(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(15.dp))
-            .background(color = Color.White),
+            .background(color = Color.White)
+            .clickable { onCardClick(flight) },
         contentAlignment = Alignment.Center
     ) {
         Column {
@@ -223,20 +225,20 @@ fun FlightDetailCard(flight: Flight) {
 }
 
 @Composable
-fun FlightDetailCardList(flights: List<Flight>) {
+fun FlightDetailCardList(flights: List<Flight>, onCardClick: (Flight) -> Unit) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(20.dp),
 //        modifier = Modifier.padding(10.dp)
     ) {
         items(flights) { flight ->
-            FlightDetailCard(flight = flight)
+            FlightDetailCard(flight = flight, onCardClick = onCardClick)
         }
     }
 }
 
-@Preview
-@Composable
-fun FlightDetailCardPreview() {
-    FlightDetailCardList(flights = Flights.list)
-}
+//@Preview
+//@Composable
+//fun FlightDetailCardPreview() {
+//    FlightDetailCardList(flights = Flights.list)
+//}
 
